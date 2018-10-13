@@ -1,0 +1,8 @@
+{
+	"profile_path": "c:\\Program Files\\OpenVPN\\bin\\client.ovpn",
+	"server_addr": "192.168.30.148",
+	"protocol": "udp",
+	"port": 1194,
+	"auth_username": "",
+	"auth_password": ""
+}
