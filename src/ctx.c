@@ -20,11 +20,11 @@ static int parse_options(ovc_ctx_priv_t *ctx, const char *config_json)
 	ovc_options_t *ops = &ctx->ops;
 
 	jhelper_object_t ovc_opts[] = {
-		{"enable_log", JSON_TYPE_BOOL, false, &ops->enable_log},
-		{"log_level", JSON_TYPE_INT, false, &ops->log_level},
-		{"openvpn_path", JSON_TYPE_STRING, true, &ops->ovpn_bin_path},
-		{"report_ovpn_log", JSON_TYPE_BOOL, false, &ops->report_ovpn_log},
-		{"report_byte_count", JSON_TYPE_BOOL, false, &ops->report_byte_count}
+		{"enable_log", JSON_TYPE_BOOL, false, &ops->enable_log, 0},
+		{"log_level", JSON_TYPE_INT, false, &ops->log_level, 0},
+		{"openvpn_path", JSON_TYPE_STRING, true, ops->ovpn_bin_path, sizeof(ops->ovpn_bin_path)},
+		{"report_ovpn_log", JSON_TYPE_BOOL, false, &ops->report_ovpn_log, 0},
+		{"report_byte_count", JSON_TYPE_BOOL, false, &ops->report_byte_count, 0}
 	};
 
 	/* init context options */
@@ -39,9 +39,6 @@ static int parse_options(ovc_ctx_priv_t *ctx, const char *config_json)
 		return -1;
 	}
 
-	ctx->opt_data = ovc_opts;
-	ctx->opt_count = sizeof(ovc_opts) / sizeof(jhelper_object_t);
-
 	return 0;
 }
 
@@ -51,7 +48,6 @@ static int parse_options(ovc_ctx_priv_t *ctx, const char *config_json)
 
 static void free_ctx(ovc_ctx_priv_t *ctx)
 {
-	jhelper_free((jhelper_object_t *)ctx->opt_data, ctx->opt_count);
 	free(ctx);
 }
 
@@ -127,7 +123,7 @@ int ovc_start_conn(ovc_ctx_priv_t *ctx, const char *conn_json)
  * stop OpenVPN connection
  */
 
-int ovc_stop_conn(ovc_ctx_priv_t *ctx)
+int ovc_stop_conn(ovc_ctx_priv_t *ctx, bool is_non_block)
 {
-	return ovc_stop_ovpn(&ctx->conn_mgr);
+	return ovc_stop_ovpn(&ctx->conn_mgr, is_non_block);
 }

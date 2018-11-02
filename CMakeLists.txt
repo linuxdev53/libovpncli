@@ -2,7 +2,11 @@
 # libovpncli project settings
 cmake_minimum_required (VERSION 2.8.11)
 project (libovpncli)
-set (CMAKE_BUILD_TYPE Release)
+
+# set default build type as release
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
 
 # set libovpncli version
 set (LIBOVPNCLI_VERSION "0.9.0")
@@ -44,10 +48,10 @@ include (ExternalProject)
 ExternalProject_Add (
 	libjsonc-helper
 	GIT_REPOSITORY https://github.com/linuxdev53/jsonc-helper
-	GIT_TAG ""
+	GIT_TAG "v0.9.1"
 	UPDATE_COMMAND ""
 	PATCH_COMMAND ""
-	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/libjsonc-helper-inst
+	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/libjsonc-helper-inst -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
 # add subdirectory

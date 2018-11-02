@@ -51,8 +51,8 @@ static void send_log_notify(enum OVC_LOG_TYPE log_type, const char *log_line)
 	char *notify_str;
 
 	jhelper_object_t log_jobjs[] = {
-		{"type", JSON_TYPE_INT, false, &notify_type},
-		{"data", JSON_TYPE_STRING, false, (void *)log_line}
+		{"type", JSON_TYPE_INT, false, &notify_type, 0},
+		{"data", JSON_TYPE_STRING, false, (void *)log_line, 0}
 	};
 
 	if (!g_logger->c->notify_cb)

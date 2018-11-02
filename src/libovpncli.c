@@ -48,7 +48,7 @@ int libovpncli_start_conn(ovc_ctx_t *ctx, const char *conn_json)
 
 int libovpncli_stop_conn(ovc_ctx_t *ctx)
 {
-	return 0;
+	return ovc_stop_conn((ovc_ctx_priv_t *)ctx, false);
 }
 
 /*

@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 	ret = libovpncli_start_conn(ctx, conn_params_json);
 	if (ret == 0) {
 		/* sleep for 30 seconds */
-		sleep(30);
+		sleep(10);
 
 		/* stop OpenVPN conneciton */
 		libovpncli_stop_conn(ctx);

@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <unistd.h>
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -9,6 +12,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #endif
+
+#include "common.h"
 
 /* size bounded string copy function */
 size_t strlcpy(char *dst, const char *src, size_t size)
@@ -94,4 +99,63 @@ int get_free_listen_port(int start_port)
 #endif
 
 	return (ret == 0) ? listen_port : -1;
+}
+
+/* build the arguments for command line */
+void add_cmdline_args(char ***args, int *args_count, const char *fmt, ...)
+{
+	char **p = *args;
+	int count = *args_count;
+
+	va_list va_args;
+	char cmdline[OVC_MAX_CMDLINE];
+
+	char *tok, *rest;
+
+	/* get whole command line string */
+	va_start(va_args, fmt);
+	vsnprintf(cmdline, sizeof(cmdline), fmt, va_args);
+	va_end(va_args);
+
+	/* split arguments by space */
+	for (tok = strtok_r(cmdline, " ", &rest); tok != NULL;
+		 tok = strtok_r(NULL, " ", &rest)) {
+		if (isspace(*tok))
+			continue;
+
+		p = realloc(p, (count + 1) * sizeof(char *));
+		if (!p)
+			return;
+		p[count++] = strdup(tok);
+	}
+
+	/* fill NULL to tail */
+	p = realloc(p, (count + 1) * sizeof(char *));
+	p[count] = NULL;
+
+	*args = p;
+	*args_count = count;
+}
+
+/* get token by given character */
+void get_token_by_char(char **pp, char sep, char *token, size_t size)
+{
+	char *p = *pp;
+	int i = 0;
+
+	/* set buffer until comma is exist */
+	while (*p != sep && *p != '\0' && *p != '\n' && !isspace(*p)) {
+		if (size > 0 && (i == (int) (size - 1)))
+			break;
+
+		if (token)
+			token[i++] = *p;
+		p++;
+	}
+
+	if (token)
+		token[i] = '\0';
+
+	if (*p != '\0')
+		*pp = p + 1;
 }
