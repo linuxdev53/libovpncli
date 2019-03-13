@@ -1,0 +1,9 @@
+{
+	"profile_path": "/etc/openvpn/client.ovpn",
+	"server_addr": "127.0.0.1",
+	"protocol": "udp",
+	"port": 1194,
+	"extra_options": "--nobind",
+	"auth_username": "",
+	"auth_password": ""
+}

@@ -1,0 +1,7 @@
+{
+	"enable_log" : true,
+	"verbosity": "debug",
+	"openvpn_path": "/usr/sbin/openvpn",
+	"report_openvpn_log": true,
+	"report_byte_count": true
+}
